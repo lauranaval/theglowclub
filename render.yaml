@@ -1,0 +1,30 @@
+# Proposta de desplegament: crea recursos de pagament. Revisar preus abans d'aplicar.
+# No conté dades de demostració ni executa seed_demo.
+databases:
+  - name: glow-db
+    plan: basic-256mb
+    region: frankfurt
+    postgresMajorVersion: "17"
+    ipAllowList: []
+services:
+  - type: web
+    name: theglowclub
+    runtime: python
+    region: frankfurt
+    plan: starter
+    buildCommand: bash scripts/build.sh
+    preDeployCommand: python manage.py migrate --noinput
+    startCommand: gunicorn glow.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60 --access-logfile -
+    healthCheckPath: /healthz/
+    autoDeployTrigger: "off"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.12
+      - key: GLOW_DEBUG
+        value: "0"
+      - key: GLOW_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: glow-db
+          property: connectionString

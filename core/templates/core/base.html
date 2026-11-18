@@ -1,0 +1,4 @@
+{% load static %}<!doctype html>
+<html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{% block title %}The Glow Club · Gestió{% endblock %}</title><link rel="stylesheet" href="{% static 'core/style.css' %}"></head>
+<body><header><a class="brand" href="{% url 'home' %}"><span class="spark">✳</span> THE GLOW CLUB <small>ESPAI DE GESTIÓ</small></a>{% if user.is_authenticated %}<nav><a href="{% url 'home' %}">Tallers i reserves</a><span class="user">{{ user.first_name }}</span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="quiet">Sortir</button></form></nav>{% endif %}</header>
+<main>{% for message in messages %}<div role="status" class="notice {{ message.tags }}">{{ message }}</div>{% endfor %}{% block content %}{% endblock %}</main><footer>The Glow Club · Un espai per crear, un lloc per compartir.</footer></body></html>
