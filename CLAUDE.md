@@ -3,7 +3,8 @@
 ## Comença aquí
 
 1. Llegeix `docs/TRASPAS_CLAUDE_CODE.md` (estat verificat, limitacions, mapa del codi i següents passos).
-2. Llegeix `docs/Glow_Club_Especificacio_Funcional_v1.0.md` (document original complet aportat per la usuària).
+2. Llegeix `docs/Glow_Club_Especificacio_Funcional_v2.0.md` (especificació vigent del 20/11/2026; mana sobre la v1.0 i fixa l'ordre de construcció: primer el bloc de la fira del 5/12). Prototip de pantalles: https://claude.ai/artifact/F4SBAPcnnfPNt6biMA7XEz
+   Context històric: `docs/Glow_Club_Especificacio_Funcional_v1.0.md` (document original aportat per la usuària).
 3. Llegeix `docs/ENCARREC_I_DECISIONS.md` (encàrrec i decisions de la conversa que complementen l’especificació).
 4. Per executar i provar: `README.md`, `docs/verificacio.md`. Per allotjar: `docs/HOSTING_SENSE_COST.md` i `docs/desplegament.md`.
 
