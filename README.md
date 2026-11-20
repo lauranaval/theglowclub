@@ -1,5 +1,11 @@
 # The Glow Club · Gestió interna
 
+## Continuar amb Claude Code
+
+Comença per [CLAUDE.md](CLAUDE.md) i el [traspàs complet](docs/TRASPAS_CLAUDE_CODE.md). L’[especificació original](docs/Glow_Club_Especificacio_Funcional_v1.0.md) i l’[encàrrec i decisions posteriors](docs/ENCARREC_I_DECISIONS.md) també són al repositori.
+
+**Estat vigent:** primer bloc implementat; aplicació encara no desplegada. La propietària vol començar sense pagar. `render.yaml` és una proposta anterior de pagament: llegir [hosting sense cost](docs/HOSTING_SENSE_COST.md) abans de desplegar.
+
 Primer bloc funcional de l’especificació v1.0: tallers, sessions, clientes, reserves, cobraments manuals i assistència. Interfície en català, adaptable a mòbil i ordinador. Totes les dades inicials són fictícies.
 
 ## Arrencada local

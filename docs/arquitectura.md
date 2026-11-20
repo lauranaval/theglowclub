@@ -1,5 +1,7 @@
 # Decisions tècniques i límits
 
+> Per a l’estat consolidat del traspàs, consulta `TRASPAS_CLAUDE_CODE.md`. Per a la preferència posterior d’allotjament sense pagar, consulta `HOSTING_SENSE_COST.md`.
+
 ## Base escollida
 
 El repositori inicial només contenia l’especificació funcional. Django 5.2 LTS proporciona autenticació individual amb contrasenyes xifrades per hash, sessions al servidor, formularis validats, escapament HTML i CSRF, sense afegir una API i una aplicació de client separades. Les pàgines renderitzades al servidor funcionen sense JavaScript; CSS adapta la presentació al mòbil. SQLite permet una arrencada local sense serveis addicionals i una base compartida per les tres usuàries en un únic servidor. No hi ha alta pública ni permisos diferents entre Laura, Elena i Sandra.

@@ -36,6 +36,10 @@ Vendes, comandes, extres, tasques, seguiment de col·laboradors, sessions de cob
 
 S’han executat 18 proves contra SQLite i PostgreSQL 17 real en un contenidor local. Inclouen la recuperació de contrasenya amb bústia de test i concurrència mixta d’alta/promoció i augment de places. A PostgreSQL s’ha corregit la neteja de connexions dels fils de prova perquè la base temporal es pugui eliminar correctament després de les assercions.
 
-S’han afegit `render.yaml`, GitHub Actions, servidor Gunicorn, WhiteNoise, configuració DATABASE_URL i ordre `create_team`. No hi ha cap acció de GitHub remota executada ni desplegament fet. SMTP real, còpies externes i limitació d’intents d’accés encara s’han de configurar.
+S’han afegit `render.yaml`, GitHub Actions, servidor Gunicorn, WhiteNoise, configuració DATABASE_URL i ordre `create_team`. Aquesta era la situació abans de la publicació a GitHub; la verificació remota posterior es registra al final. No hi ha desplegament fet. SMTP real, còpies externes i limitació d’intents d’accés encara s’han de configurar.
 
 La prova de producció local també ha passat: Gunicorn amb dues workers, comprovació de base de dades, pantalla d’accés i CSS amb hash servit per WhiteNoise. `check --deploy` deixa dos avisos intencionats d’HSTS (subdominis i preload desactivats fins a confirmar el domini). L’ordre `create_team` s’ha comprovat amb tres correus ficticis i sense privilegis d’administració. No s’ha provat Render real.
+
+## Publicació i verificació remota
+
+El codi es va publicar al commit `66493cf69661c2af1940a498139dc7951015c3b4`. Els dos jobs SQLite i PostgreSQL van finalitzar correctament a [GitHub Actions](https://github.com/lauranaval/theglowclub/actions/runs/44268374566). La versió conté 18 proves. Aquesta evidència és de la publicació inicial, no d’una nova execució durant el traspàs de documentació. El llançador Windows i SMTP real continuen sense verificar en els entorns de la propietària.

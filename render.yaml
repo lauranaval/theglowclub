@@ -1,3 +1,5 @@
+# AVÍS DE TRASPÀS: la propietària ha demanat cost zero després de crear aquest fitxer.
+# Configuració històrica de pagament; consultar docs/HOSTING_SENSE_COST.md abans d’aplicar.
 # Proposta de desplegament: crea recursos de pagament. Revisar preus abans d'aplicar.
 # No conté dades de demostració ni executa seed_demo.
 databases:

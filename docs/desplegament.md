@@ -1,5 +1,7 @@
 # Desplegament proposat: GitHub → Render → PostgreSQL
 
+> Context històric de la proposta de pagament. La preferència posterior de la propietària és cost zero. Consulta `HOSTING_SENSE_COST.md` i `TRASPAS_CLAUDE_CODE.md`. No aplicar aquest Blueprint com si fos gratuït.
+
 Repositori indicat per la usuària: https://github.com/lauranaval/theglowclub
 
 ## Estat
