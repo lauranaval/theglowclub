@@ -24,7 +24,14 @@ El codi Django existent (primer bloc: tallers, sessions, reserves, cobraments, a
 
 ## Metodologia de desenvolupament
 
-Desenvolupament guiat per resultats (ODD) amb l'arnès Superpowers: cada bloc té un fitxer de resultats aprovat per la propietària, cada resultat té una prova escrita abans del codi, i cap bloc es dona per acabat si les proves (Vitest i Playwright, inclosa la vista mòbil i el mode sense connexió) no passen.
+Desenvolupament guiat per resultats (ODD) amb l'arnès Superpowers (activat a `.claude/settings.json`).
+
+1. Treballa per blocs, en l'ordre de l'especificació. Cada bloc té un fitxer a `outcomes/` (vegeu `outcomes/README.md`).
+2. **No implementis un bloc si el seu fitxer no diu `Estat: APROVAT`.** Si un resultat no es pot complir tal com està escrit, para i pregunta a la Laura.
+3. Per a cada resultat: primer la prova (Vitest o Playwright, amb l'identificador al nom), comprova que falla, després el codi.
+4. `npm run check` ha d'executar totes les proves (Vitest i Playwright, inclosa la vista mòbil i el mode sense connexió). El hook `scripts/odd-gate.sh` l'executa en acabar cada torn i bloqueja si falla.
+5. En acabar un bloc, un agent revisor independent marca cada resultat amb ✅ o ❌ al fitxer d'`outcomes/`.
+6. La Laura no és programadora: explica-li els avenços en català, en termes del que pot provar, i dona-li una manera de veure l'app real (un desplegament de prova a Cloudflare), no un localhost.
 
 ## Regles que s’han de preservar
 
