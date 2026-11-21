@@ -13,7 +13,7 @@ Decidit per la Laura el 21/11/2026. Preus finals en euros (sense IVA, l'app no e
 | Collaret de cadeneta fina + charm BFF + 1 charm (unitat) | 9 € | 2 | |
 | Arracades floreta | 5 € | — | |
 | Arracades boles | 6 € | — | |
-| Arracades d'aro finet + charm | 8 € (proposat) | 1 per arracada | Preu per confirmar |
+| Arracades d'aro finet + charm (parell) | 8 € | 1 per arracada | |
 | Charm extra bàsic | 2 € | — | S'afegeix a qualsevol producte |
 | Charm extra especial | 3 € | — | Charms especials: llista pendent |
 
@@ -27,5 +27,4 @@ Decidit per la Laura el 21/11/2026. Preus finals en euros (sense IVA, l'app no e
 ## Pendent
 
 - Quins charms compten com a especials.
-- Preu definitiu de les arracades d'aro finet + charm (proposta: 8 €).
-- Models nous proposats (polsera d'eslabons + 1 charm, conjunt polsera + collaret, clauer, polsera infantil, caixeta de regal): no decidits.
+- Models nous proposats (polsera d'eslabons + 1 charm, conjunt polsera + collaret, clauer, polsera infantil, caixeta de regal): descartats de moment (21/11/2026).
