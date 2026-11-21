@@ -1,5 +1,5 @@
 // Configuració de Cloudflare Workers per a The Glow Club (pla gratuït).
-// No hi ha cap recurs de pagament. El database_id s'omple quan la Laura creï la D1 al seu compte.
+// No hi ha cap recurs de pagament. Base D1 "glow" creada al compte de la Laura (pla gratuït, Europa occidental).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "theglowclub",
@@ -15,7 +15,7 @@
     {
       "binding": "DB",
       "database_name": "glow",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "e9576d24-c4fb-4be7-aecd-713e22ce6650",
       "migrations_dir": "migrations"
     }
   ],

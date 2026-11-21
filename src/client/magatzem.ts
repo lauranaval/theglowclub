@@ -87,6 +87,17 @@ export async function marca(
   });
 }
 
+/** Torna a posar com a pendents (sync = 0) tots els registres rebutjats pel servidor, perquè es reenviïn. */
+export async function tornaAPendents(): Promise<void> {
+  await transaccio(["vendes", "anulacions", "caixes"], "readwrite", async (t) => {
+    for (const m of ["vendes", "anulacions", "caixes"]) {
+      const s = t.objectStore(m);
+      const rebutjats = (await promesa(s.index("sync").getAll(2))) as AmbSync<{ id: string }>[];
+      for (const r of rebutjats) s.put({ ...r, sync: 0, errors: undefined });
+    }
+  });
+}
+
 export async function pendents(): Promise<{ vendes: AmbSync<Venda>[]; anulacions: AmbSync<Anulacio>[]; caixes: AmbSync<Caixa>[] }> {
   return transaccio(["vendes", "anulacions", "caixes"], "readonly", async (t) => {
     const per = <T>(m: string) => promesa(t.objectStore(m).index("sync").getAll(0)) as Promise<AmbSync<T>[]>;

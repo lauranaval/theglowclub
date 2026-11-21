@@ -2,6 +2,8 @@
 
 Destí vigent (decisió del 21/11/2026): Cloudflare Workers + D1 + Access, pla gratuït i sense targeta. La proposta de Render de més avall és antiga i de pagament: no s'ha de fer servir.
 
+Estat (21/11/2026): compte personal de la propietària creat; base D1 `glow` a Europa occidental amb les migracions aplicades; secret `USUARIES` configurat. En activar Zero Trust s'hi va registrar una targeta: només hi ha d'haver plans gratuïts (Zero Trust Free, Workers Free). Abans de canviar cap pla o activar cap servei, revisar **Billing → Subscriptions** i demanar aprovació explícita a la propietària.
+
 En desplegar, abans d'obrir l'app a ningú:
 
 - **Cloudflare Access:** crear l'aplicació amb la política de correu (codi d'un sol ús) per a les tres usuàries i una sessió llarga (per exemple, 30 dies).

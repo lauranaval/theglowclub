@@ -211,6 +211,18 @@ export async function sincronitza(
   }
 
   if (sentencies.length) await db.batch(sentencies);
+
+  // Dues peticions simultànies poden passar totes dues la comprovació prèvia; la inserció és ON CONFLICT DO NOTHING.
+  // El resultat ha de reflectir el que realment ha quedat desat: es torna a llegir l'anul·lació de cada venda.
+  if (res.acceptades.anulacions.length) {
+    const vendaDe = new Map(anulacions.filter((a) => res.acceptades.anulacions.includes(a?.id)).map((a) => [a.id, a.vendaId]));
+    const desades = await anulacionsExistents(db, [...vendaDe.values()]);
+    res.acceptades.anulacions = res.acceptades.anulacions.filter((id) => {
+      if (desades.get(vendaDe.get(id)!) === id) return true;
+      res.rebutjades.push({ tipus: "anulacio", id, errors: ["la venda ja estava anul·lada"] });
+      return false;
+    });
+  }
   return res;
 }
 

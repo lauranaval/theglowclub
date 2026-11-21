@@ -49,7 +49,14 @@ const estat = {
   darreraSync: null as string | null,
   persistent: null as boolean | null,
   fitxes: {} as Record<string, { caixa: { nombreVendes: number; efectiuCents: number; targetaCents: number; netCents: number; nombreCaixes: number }; consultadaA: string }>,
-  resumServidor: null as null | { nombreVendes: number; netCents: number; efectiuCents: number; targetaCents: number; nombreCaixes: number },
+  resumServidor: null as null | {
+    nombreVendes: number;
+    netCents: number;
+    efectiuCents: number;
+    targetaCents: number;
+    nombreCaixes: number;
+    vendes?: { id: string; anulacio: (Anulacio & { registradaPer?: string }) | null }[];
+  },
 };
 
 // ---------- Utilitats ----------
@@ -256,6 +263,8 @@ async function actualitzaResumServidor() {
 // ---------- Accions ----------
 
 async function obreCaixa(form: HTMLFormElement) {
+  // Sense les dades de /api/dades no se sap qui ven: no es pot obrir caixa.
+  if (!estat.dades) return;
   const dades = new FormData(form);
   const canvi = eurosACents(String(dades.get("canvi") ?? ""));
   if (canvi == null) return avisa("Escriu el canvi inicial en euros (per exemple, 50).");
@@ -284,7 +293,7 @@ async function obreCaixa(form: HTMLFormElement) {
 
 async function cobra(metode: Metode) {
   const caixa = caixaOberta();
-  if (!caixa || estat.tiquet.length === 0) return;
+  if (!caixa || !estat.dades || estat.tiquet.length === 0) return;
   const linies = estat.tiquet;
   const venda: db.AmbSync<Venda> = {
     id: nouId(),
@@ -329,6 +338,14 @@ async function tancaCaixa(recompte: number, tpv: number, nota: string) {
     usuariaTancament: usuaria(),
     sync: 0,
   });
+  await recarregaLocal();
+  dibuixa();
+  void sincronitza();
+}
+
+/** Torna a posar com a pendents els registres rebutjats (p. ex. si s'ha corregit la llista d'usuàries) i els reenvia. */
+async function tornaAEnviar() {
+  await db.tornaAPendents();
   await recarregaLocal();
   dibuixa();
   void sincronitza();
@@ -517,6 +534,11 @@ function htmlTiquet(): string {
 }
 
 function htmlObrirCaixa(): string {
+  if (!estat.dades) {
+    return `<div class="targeta" id="sense-dades"><h2>Cal connectar-se</h2>
+      <p>Per vendre, cal connectar-se un cop: així l'app descarrega el catàleg i sap qui ven.</p>
+      <p>Connecta't a internet i prem «Sincronitzar ara». Després ja es podrà vendre sense connexió.</p></div>`;
+  }
   const anterior = caixaActual();
   const avui = diaLocal();
   const esds = estat.dades?.esdeveniments ?? [];
@@ -565,6 +587,12 @@ function htmlCaixa(): string {
 function htmlLlistaVendes(vendes: db.AmbSync<Venda>[]): string {
   if (!vendes.length) return '<p class="buit">Encara no hi ha vendes avui en aquest dispositiu.</p>';
   const anul = new Map(estat.anulacions.map((a) => [a.vendaId, a]));
+  // Qui ha sincronitzat cada anul·lació (identitat d'Access): només ho sap el servidor.
+  const delServidor = new Map((estat.resumServidor?.vendes ?? []).filter((v) => v.anulacio).map((v) => [v.anulacio!.id, v.anulacio!]));
+  const registradaPer = (a: Anulacio) => {
+    const qui = delServidor.get(a.id)?.registradaPer;
+    return qui && qui !== a.usuaria ? ` · registrada per ${esc(qui)}` : "";
+  };
   return `<ul aria-label="Vendes del dia" class="vendes">${[...vendes]
     .reverse()
     .map((v) => {
@@ -572,7 +600,7 @@ function htmlLlistaVendes(vendes: db.AmbSync<Venda>[]): string {
       return `<li class="${a ? "anulada" : ""}"><div class="linia"><span><strong>${hora(v.creadaA)}</strong> · ${v.metode === "efectiu" ? "Efectiu" : "Targeta"}${v.sync === 0 ? ' · <span class="pendent">pendent</span>' : v.sync === 2 ? ' · <span class="pendent">error</span>' : ""}</span>
         <strong>${formatEuros(v.totalCents)}</strong></div>
         <p class="detall">${v.linies.map((l) => `${l.pare != null ? "＋ " : ""}${esc(l.descripcio)} ${formatEuros(l.preuCents * l.quantitat)}`).join(" · ")}</p>
-        ${a ? `<p class="detall">Anul·lada: ${esc(a.motiu)} · ${esc(a.usuaria)} · ${hora(a.creadaA)}</p>` : `<button type="button" class="boto secundari petit" data-anula="${esc(v.id)}" aria-label="Anul·lar la venda de ${formatEuros(v.totalCents)} de les ${hora(v.creadaA)}">Anul·lar</button>`}</li>`;
+        ${a ? `<p class="detall">Anul·lada: ${esc(a.motiu)} · ${esc(a.usuaria)} · ${hora(a.creadaA)}${registradaPer(a)}</p>` : `<button type="button" class="boto secundari petit" data-anula="${esc(v.id)}" aria-label="Anul·lar la venda de ${formatEuros(v.totalCents)} de les ${hora(v.creadaA)}">Anul·lar</button>`}</li>`;
     })
     .join("")}</ul>`;
 }
@@ -608,7 +636,7 @@ function htmlFira(): string {
   return `<p class="nota">Dades descarregades el ${dataHora(d.generatA)}.</p>${d.esdeveniments
     .map((e) => {
       const tallers = d.tallers.filter((t) => t.esdevenimentId === e.id);
-      return `<section class="targeta"><h2>${esc(e.nom)}</h2><p>${dataCurta(e.dataInici)}${e.dataFi !== e.dataInici ? ` – ${dataCurta(e.dataFi)}` : ""}${e.ubicacio ? ` · ${esc(e.ubicacio)}` : ""}</p>
+      return `<section class="targeta" aria-label="${esc(e.nom)}"><h2>${esc(e.nom)}</h2><p>${dataCurta(e.dataInici)}${e.dataFi !== e.dataInici ? ` – ${dataCurta(e.dataFi)}` : ""}${e.ubicacio ? ` · ${esc(e.ubicacio)}` : ""}</p>
         ${e.notes ? `<p class="detall">${esc(e.notes)}</p>` : ""}
         ${htmlResumEsdeveniment(e.id)}
         <ul class="tallers">${tallers
@@ -627,7 +655,9 @@ function htmlMes(): string {
   return `<div class="targeta"><h2>Còpia d'emergència</h2>
       <p>${vendes} ${vendes === 1 ? "venda pendent" : "vendes pendents"} i ${altres} altres canvis per sincronitzar. Si el dispositiu no es pot connectar, descarrega'n una còpia i guarda-la.</p>
       <button type="button" class="boto primari" id="copia">Descarregar còpia d'emergència</button></div>
-    ${errors ? `<div class="targeta"><h2>Registres amb errors</h2><p>El servidor no els ha acceptat. Es conserven aquí i a la còpia d'emergència.</p><ul>${rebutjades.map((x: any) => `<li>${esc(x.id)}: ${esc((x.errors ?? []).join(", "))}</li>`).join("")}</ul></div>` : ""}
+    ${errors ? `<div class="targeta"><h2>Registres amb errors</h2><p>El servidor no els ha acceptat. Es conserven aquí i a la còpia d'emergència.</p><ul>${rebutjades.map((x: any) => `<li>${esc(x.id)}: ${esc((x.errors ?? []).join(", "))}</li>`).join("")}</ul>
+      <p>Si s'ha corregit el problema (per exemple, la llista d'usuàries), es poden tornar a enviar.</p>
+      <button type="button" class="boto primari" id="torna-enviar">Tornar a enviar</button></div>` : ""}
     <div class="targeta"><h2>Aquest dispositiu</h2>
       <p>Usuària: ${esc(estat.dades?.usuaria ?? "—")}</p>
       <p>Identificador: <code data-testid="dispositiu">${esc(estat.dispositiuId)}</code></p>
@@ -736,6 +766,7 @@ function connecta(arrel: HTMLElement) {
     });
   }
   arrel.querySelector("#copia")?.addEventListener("click", descarregaCopia);
+  arrel.querySelector("#torna-enviar")?.addEventListener("click", () => void tornaAEnviar());
 }
 
 function dibuixaCobrament() {

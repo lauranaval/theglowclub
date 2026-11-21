@@ -61,6 +61,26 @@ describe("Revisió independent · anul·lacions duplicades", () => {
     expect(reenviada.cos.rebutjades).toEqual([]);
   });
 
+  it("F-06 dos dispositius anul·len la mateixa venda alhora: exactament una acceptada i l'altra rebutjada", async () => {
+    const caixa = novaCaixa("disp-rev-a3");
+    const v = novaVenda(caixa, "efectiu", [lliure(1700)]);
+    await sincronitza({ dispositiuId: caixa.dispositiuId, caixes: [caixa], vendes: [v] });
+    const deA = { id: crypto.randomUUID(), vendaId: v.id, motiu: "duplicada", usuaria: "laura@example.test", creadaA: "2026-12-05T10:05:00.000Z" };
+    const deB = { id: crypto.randomUUID(), vendaId: v.id, motiu: "error de preu", usuaria: "elena@example.test", creadaA: "2026-12-05T10:06:00.000Z" };
+    const [ra, rb] = await Promise.all([
+      sincronitza({ dispositiuId: "disp-rev-a3", anulacions: [deA] }),
+      sincronitza({ dispositiuId: "disp-rev-a3-b", anulacions: [deB] }, "elena@example.test"),
+    ]);
+    const acceptades = [...ra.cos.acceptades.anulacions, ...rb.cos.acceptades.anulacions];
+    const rebutjades = [...ra.cos.rebutjades, ...rb.cos.rebutjades];
+    expect(acceptades).toHaveLength(1);
+    expect(rebutjades).toHaveLength(1);
+    expect(rebutjades[0].errors).toEqual(["la venda ja estava anul·lada"]);
+    const desada = await env.DB.prepare("SELECT id FROM anulacions WHERE venda_id = ?").bind(v.id).first<{ id: string }>();
+    expect(desada?.id).toBe(acceptades[0]);
+    expect(rebutjades[0].id).not.toBe(acceptades[0]);
+  });
+
   it("F-06 dues anul·lacions de la mateixa venda dins del mateix lot: només s'accepta la primera", async () => {
     const caixa = novaCaixa("disp-rev-a2");
     const v = novaVenda(caixa, "efectiu", [lliure(900)]);

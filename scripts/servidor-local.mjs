@@ -1,6 +1,6 @@
 // Arrenca l'app en local amb Wrangler (sense cap compte de Cloudflare) i l'accés de prova.
 // Ús: node scripts/servidor-local.mjs [port] [--proves]
-//   --proves: base de dades nova a cada arrencada (.wrangler/proves), per a Playwright.
+//   --proves: base de dades nova a cada arrencada (.wrangler/proves) i llista d'usuàries de prova, per a Playwright.
 import { spawn, spawnSync } from "node:child_process";
 import { rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -21,10 +21,14 @@ function executa(args) {
 if (proves) rmSync(persist, { recursive: true, force: true });
 executa([path.join(arrel, "scripts", "build-client.mjs")]);
 executa([wrangler, "d1", "migrations", "apply", "glow", "--local", "--persist-to", persist]);
+// Dades pròpies de les proves de navegador (només a la base de proves local, mai a producció).
+if (proves) executa([wrangler, "d1", "execute", "glow", "--local", "--persist-to", persist, "--file", path.join(arrel, "e2e", "dades-proves.sql")]);
 
+// En mode de proves, el servidor aplica el control d'usuàries com a producció (correus de prova, mai reals).
+const usuariesProves = proves ? ["--var", "USUARIES:laura@example.test,elena@example.test,sandra@example.test"] : [];
 const fill = spawn(
   process.execPath,
-  [wrangler, "dev", "--local", "--ip", "127.0.0.1", "--port", port, "--persist-to", persist, "--var", "DEV_AUTH:1", "--show-interactive-dev-session=false"],
+  [wrangler, "dev", "--local", "--ip", "127.0.0.1", "--port", port, "--persist-to", persist, "--var", "DEV_AUTH:1", ...usuariesProves, "--show-interactive-dev-session=false"],
   { cwd: arrel, stdio: "inherit", env },
 );
 const atura = () => fill.kill();
