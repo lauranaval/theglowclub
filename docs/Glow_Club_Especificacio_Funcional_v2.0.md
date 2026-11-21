@@ -222,6 +222,54 @@ Decisions de la importació:
 - Els registres buits no s'importen. Les reserves sense clienta o sense taller queden a una llista de revisió.
 - Els col·laboradors de Notion en estat Confirmat passen a Col·laboradores; la resta, a Prospecció amb el seu estat. Els tallers amb modalitat Privat o Empresa s'importen com a encàrrecs privats del tipus corresponent.
 
+## Arquitectura i funcionament sense connexió
+
+L'app es construeix com una aplicació web instal·lable (PWA) sobre Cloudflare, amb cost zero, i la venda de paradeta funciona completament sense connexió a l'iPad. Substitueix la base Django del primer bloc.
+
+| Peça | Tria | Motiu |
+| --- | --- | --- |
+| Servidor | Cloudflare Workers (TypeScript) | No s'adorm; pla gratuït de 100.000 peticions/dia; ús comercial permès |
+| Base de dades | Cloudflare D1 (SQLite) | 500 MB gratuïts; escriptures serialitzades, que garanteixen l'aforament; recuperació a qualsevol minut dels últims 7 dies |
+| Accés | Cloudflare Access | Gratuït per a menys de 50 usuàries; entrada amb codi d'un sol ús al correu |
+| App | PWA amb service worker i IndexedDB | Instal·lable a la pantalla d'inici de l'iPad i del mòbil; funciona sense connexió |
+| Còpies | Recuperació de D1 + exportació diària automàtica a un repositori privat | Dues còpies independents |
+| Proves | Vitest (lògica) i Playwright (navegador, vista mòbil i mode sense connexió) | Verificació dels criteris d'acceptació |
+
+**Què funciona sense connexió**
+
+| Funció | Sense connexió | Motiu |
+| --- | --- | --- |
+| Venda de paradeta (catàleg, línia lliure, efectiu, targeta) | Sí, completa | Les vendes només s'afegeixen; no hi ha conflictes |
+| Obrir i tancar caixa, resum del dia | Sí | Es calcula amb les vendes del dispositiu |
+| Anul·lar una venda del dia | Sí | Queda registrada amb motiu i es sincronitza |
+| Consultar tallers, reserves i clientes | Sí, només lectura | Dades de l'última sincronització, amb la data visible |
+| Noves reserves, canvis de places, cobraments de reserves | No | L'aforament només es pot garantir amb el servidor |
+
+**Sincronització**
+
+- Cada venda es crea al dispositiu amb un identificador únic. Reenviar-la dues vegades no la duplica.
+- L'app sincronitza automàticament quan està oberta i torna la connexió, i té un botó «Sincronitzar ara». L'iPad no permet sincronitzar en segon pla.
+- Una barra sempre visible indica l'estat: «Sense connexió · 12 vendes per sincronitzar» o «Tot sincronitzat a les 18:42».
+- Abans de la fira, l'app descarrega el catàleg, els tallers de l'esdeveniment i les dades de consulta.
+- Si cal, es poden descarregar les vendes pendents en un fitxer com a còpia d'emergència.
+- **Una caixa per dispositiu:** cada iPad o mòbil obre i tanca la seva caixa. El resum del dia i de l'esdeveniment suma totes les caixes un cop sincronitzades.
+
+**Requisits d'ús a l'iPad**
+
+- L'app s'ha d'instal·lar a la pantalla d'inici (Safari → Comparteix → Afegeix a la pantalla d'inici). Instal·lada, les dades es conserven; com a web normal, Safari les pot esborrar després de 7 dies sense ús.
+- La sessió d'accés ha de durar prou (per exemple, 30 dies) perquè la sincronització no falli després de la fira. Si caduca, l'app demana tornar a entrar i conserva les vendes pendents.
+- L'app demana emmagatzematge persistent al navegador i avisa si no el té.
+
+Criteris d'acceptació afegits:
+
+| Cas | Resultat esperat |
+| --- | --- |
+| 30 vendes sense connexió, tancar l'app i tornar-la a obrir | Les 30 vendes hi són i el comptador en mostra 30 pendents |
+| Recupera la connexió amb 30 vendes pendents | Se sincronitzen totes; al servidor n'hi ha 30, sense duplicats encara que la connexió es talli a mitges |
+| Tancament de caixa sense connexió | Calcula la diferència amb les vendes locals i se sincronitza després |
+| Dos dispositius venent sense connexió | Després de sincronitzar, el resum de l'esdeveniment suma les dues caixes |
+| Intentar crear una reserva sense connexió | L'app explica que cal connexió i no crea res |
+
 ## Requisits no funcionals
 
 - **Cost zero:** allotjament, base de dades, correu i còpies amb serveis gratuïts mentre sigui possible. Qualsevol servei de pagament requereix aprovació explícita de la propietària.
@@ -268,7 +316,7 @@ Es mantenen tots els criteris de la v1.0 i s'hi afegeixen els nous.
 
 Prioritat: tenir la venda de paradeta a punt per a la Fira de Nadal de Llavaneres (5 i 6 de desembre de 2026). Cada bloc s'estrena quan funciona, sense esperar els següents.
 
-1. **Fira:** accés, catàleg, venda ràpida (efectiu i targeta), obrir i tancar caixa, resum del dia, esdeveniment amb tallers d'inscripció externa.
+1. **Fira:** base Cloudflare (Workers, D1, Access), PWA instal·lable, catàleg, venda ràpida sense connexió (efectiu i targeta), sincronització, obrir i tancar caixa per dispositiu, resum del dia, esdeveniment amb tallers d'inscripció externa.
 2. **Tallers i reserves:** tallers i duplicació, reserves, senyals, cobraments, llista d'espera, encàrrecs privats, tarifes i descomptes, sol·licituds de Tally, missatges.
 3. **Contactes:** clientes amb consentiments, col·laboradores i espais, prospecció.
 4. **Economia:** pagaments a tercers, despeses i resultat per taller i esdeveniment; comandes personalitzades.
