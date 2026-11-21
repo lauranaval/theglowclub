@@ -31,7 +31,10 @@ Desenvolupament guiat per resultats (ODD) amb l'arnès Superpowers (activat a `.
 3. Per a cada resultat: primer la prova (Vitest o Playwright, amb l'identificador al nom), comprova que falla, després el codi.
 4. `npm run check` ha d'executar totes les proves (Vitest i Playwright, inclosa la vista mòbil i el mode sense connexió). El hook `scripts/odd-gate.sh` l'executa en acabar cada torn i bloqueja si falla.
 5. En acabar un bloc, un agent revisor independent marca cada resultat amb ✅ o ❌ al fitxer d'`outcomes/`.
-6. La Laura no és programadora: explica-li els avenços en català, en termes del que pot provar, i dona-li una manera de veure l'app real (un desplegament de prova a Cloudflare), no un localhost.
+6. Tauler de control: `tauler/index.html` (avenç per bloc, proves, coses fetes per dia, tokens). El regenera `scripts/odd-gate.sh` després de les proves; a mà, `npm run tauler`. Detall a `docs/TAULER.md`.
+7. Desenvolupament amb agents (definicions a `.claude/agents/`): `implementador-odd` fa cada resultat o grup petit de resultats amb el cicle prova → vermell → codi → verd; `revisor-odd` revisa el bloc en acabar (i després de cada tanda d'arranjaments) i marca ✅/❌ al fitxer d'`outcomes/`. El revisor no pot ser el mateix agent que ha implementat.
+8. Arrencada local de l'app nova: `npm run dev` (o `IniciaGlowFira.bat`), http://127.0.0.1:8787, entrada de prova amb qualsevol correu (`DEV_AUTH=1` només en local).
+9. La Laura no és programadora: explica-li els avenços en català, en termes del que pot provar, i dona-li una manera de veure l'app real (un desplegament de prova a Cloudflare), no un localhost.
 
 ## Regles que s’han de preservar
 

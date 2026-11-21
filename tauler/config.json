@@ -1,0 +1,36 @@
+{
+  "dataFira": "2026-12-05",
+  "carpetaTranscripcions": "c--Users-laura-naval-Claude-Projects-The-Glow-Club",
+  "blocs": [
+    {
+      "num": 1,
+      "nom": "Fira",
+      "pes": 25
+    },
+    {
+      "num": 2,
+      "nom": "Tallers i reserves",
+      "pes": 25
+    },
+    {
+      "num": 3,
+      "nom": "Contactes",
+      "pes": 15
+    },
+    {
+      "num": 4,
+      "nom": "Economia",
+      "pes": 15
+    },
+    {
+      "num": 5,
+      "nom": "Tasques, calendari i Excel",
+      "pes": 10
+    },
+    {
+      "num": 6,
+      "nom": "Traspàs de Notion",
+      "pes": 10
+    }
+  ]
+}
