@@ -1,6 +1,6 @@
 # Bloc 1 · Fira de Nadal de Llavaneres
 
-Estat: PENDENT D'APROVACIÓ
+Estat: APROVAT (Laura, 21/11/2026)
 Data límit d'ús real: 5/12/2026 (proves a l'iPad abans del 3/12)
 Fonts: `docs/Glow_Club_Especificacio_Funcional_v2.0.md` (Vendes i caixa; Arquitectura i funcionament sense connexió) i `docs/CATALEG_FIRA.md`.
 

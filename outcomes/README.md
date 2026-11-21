@@ -14,4 +14,4 @@ Cada bloc de l'especificació v2.0 té aquí un fitxer de resultats. Un resultat
 
 | Fitxer | Bloc | Estat |
 | --- | --- | --- |
-| `01-fira.md` | Fira: venda de paradeta sense connexió i caixa | Pendent d'aprovació |
+| `01-fira.md` | Fira: venda de paradeta sense connexió i caixa | Aprovat el 21/11/2026 |
