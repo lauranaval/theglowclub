@@ -15,7 +15,7 @@ Decidit per la Laura el 21/11/2026. Preus finals en euros (sense IVA, l'app no e
 | Arracades boles | 6 € | — | |
 | Arracades d'aro finet + charm (parell) | 8 € | 1 per arracada | |
 | Charm extra bàsic | 2 € | — | S'afegeix a qualsevol producte |
-| Charm extra especial | 3 € | — | Charms especials: llista pendent |
+| Charm extra especial | 3 € | — | La venedora tria bàsic o especial a cada venda |
 
 ## Com s'ha de modelar a l'app
 
@@ -26,5 +26,5 @@ Decidit per la Laura el 21/11/2026. Preus finals en euros (sense IVA, l'app no e
 
 ## Pendent
 
-- Quins charms compten com a especials.
+- Quins charms compten com a especials: no cal definir-ho per a la fira; l'app no necessita una llista tancada.
 - Models nous proposats (polsera d'eslabons + 1 charm, conjunt polsera + collaret, clauer, polsera infantil, caixeta de regal): descartats de moment (21/11/2026).
