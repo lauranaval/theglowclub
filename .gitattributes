@@ -1,0 +1,2 @@
+# Els scripts de bash han de tenir salts de línia LF també a Windows (si no, el hook ODD falla).
+*.sh text eol=lf

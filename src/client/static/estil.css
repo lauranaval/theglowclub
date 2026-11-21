@@ -1,0 +1,108 @@
+/* The Glow Club · identitat visual de l'especificació v2.0. Mòbil primer; menú lateral a partir de 760 px. */
+:root {
+  --vermell: #DE2F40; --vermell-fosc: #B81F30; --rosa: #F6A3DB; --rosa-clar: #FCE4F2;
+  --fons: #FAF6F7; --text: #3A1830; --suau: #6E5566; --vora: #E7D6DF; --blanc: #fff;
+  --nav: 64px; --cobrament: 76px;
+  font-family: Poppins, "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text); background: var(--fons);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; overflow-x: hidden; }
+body { min-height: 100vh; padding-bottom: calc(var(--nav) + env(safe-area-inset-bottom)); }
+body.amb-cobrament { padding-bottom: calc(var(--nav) + var(--cobrament) + 16px + env(safe-area-inset-bottom)); }
+h1, h2, .logo { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; }
+h2 { font-size: 1.3rem; margin: 0 0 8px; }
+button, input, select, textarea { font: inherit; font-size: 16px; color: inherit; }
+
+.capcalera { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 16px; padding-top: calc(10px + env(safe-area-inset-top)); background: var(--blanc); border-bottom: 1px solid var(--vora); }
+.logo { color: var(--vermell); font-size: 1.35rem; }
+.qui { font-size: .8rem; color: var(--suau); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
+
+.barra-sync { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 16px; background: var(--rosa-clar); font-size: .9rem; }
+.barra-sync.fora-de-linia { background: #FFF1C9; }
+.barra-sync.fora-de-linia::before { content: "⚠"; margin-right: 4px; }
+#text-sync { flex: 1; min-width: 0; }
+
+.avis { margin: 12px 16px; padding: 12px; border: 2px solid var(--vermell); border-radius: 12px; background: var(--blanc); }
+.avis p { margin: 0 0 8px; }
+
+main { padding: 12px 16px; max-width: 1100px; }
+.targeta { background: var(--blanc); border: 1px solid var(--vora); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+.targeta label { display: block; margin: 12px 0; font-weight: 500; }
+.targeta input, .targeta select, .targeta textarea, dialog input, dialog textarea { display: block; width: 100%; margin-top: 6px; min-height: 44px; padding: 10px 12px; border: 1px solid #BFA6B4; border-radius: 10px; background: var(--blanc); }
+.nota, .detall, .buit { color: var(--suau); font-size: .9rem; }
+.detall { margin: 4px 0; }
+.etiqueta-caixa { margin: 0 0 10px; font-size: .9rem; color: var(--suau); }
+.titol-seccio { margin-top: 18px; }
+
+.boto { min-height: 44px; min-width: 44px; padding: 10px 16px; border-radius: 12px; border: 2px solid transparent; font-weight: 600; cursor: pointer; }
+.boto.primari { background: var(--vermell); color: var(--blanc); }
+.boto.primari:hover { background: var(--vermell-fosc); }
+.boto.secundari { background: var(--blanc); color: var(--text); border-color: var(--vora); }
+.boto.petit { padding: 6px 12px; font-size: .9rem; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; }
+
+.graella { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.producte { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-height: 84px; padding: 12px; text-align: left; background: var(--blanc); border: 1px solid var(--vora); border-radius: 14px; cursor: pointer; }
+.producte:active { background: var(--rosa-clar); }
+.producte .nom { font-weight: 500; line-height: 1.25; overflow-wrap: anywhere; }
+.producte .preu { font-weight: 700; color: var(--vermell-fosc); }
+.producte .detall { font-size: .8rem; margin: 0; }
+.producte.charm { background: var(--rosa-clar); }
+.producte.lliure { border-style: dashed; }
+
+.tiquet { margin-top: 16px; }
+.tiquet ul, .vendes, .tallers { list-style: none; margin: 0; padding: 0; }
+.tiquet li, .vendes li, .tallers li { background: var(--blanc); border: 1px solid var(--vora); border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; }
+.tiquet li.linia-charm { margin-left: 20px; }
+.linia { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+.linia .desc { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.boto-preu, .boto-treu { min-height: 44px; min-width: 44px; border: 1px solid var(--vora); background: var(--fons); border-radius: 10px; font-weight: 600; cursor: pointer; }
+.boto-preu { padding: 0 10px; }
+.charms { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.vendes li.anulada { opacity: .8; border-style: dashed; }
+.vendes li.anulada .linia > strong { text-decoration: line-through; }
+.pendent { color: #8A5A00; font-weight: 600; }
+
+.xifres { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 12px 0; }
+.xifres div { background: var(--fons); border-radius: 10px; padding: 8px 10px; }
+.xifres dt { font-size: .8rem; color: var(--suau); }
+.xifres dd { margin: 2px 0 0; font-size: 1.15rem; font-weight: 700; }
+.xifres dd.diferencia { color: var(--vermell-fosc); }
+.nota-caixa { background: var(--rosa-clar); padding: 8px 10px; border-radius: 10px; }
+
+.navegacio { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; display: grid; grid-template-columns: repeat(5, 1fr); height: calc(var(--nav) + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); background: var(--blanc); border-top: 1px solid var(--vora); }
+.navegacio button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 44px; border: 0; background: none; font-size: .75rem; cursor: pointer; color: var(--suau); }
+.navegacio button[aria-current="page"] { color: var(--vermell); font-weight: 700; box-shadow: inset 0 3px 0 var(--vermell); }
+.navegacio button.central span:first-child { display: grid; place-items: center; width: 40px; height: 32px; border-radius: 16px; background: var(--vermell); color: var(--blanc); }
+
+.cobrament { position: fixed; left: 0; right: 0; bottom: calc(var(--nav) + env(safe-area-inset-bottom)); z-index: 9; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center; min-height: var(--cobrament); padding: 10px 12px; background: var(--blanc); border-top: 2px solid var(--vermell); box-shadow: 0 -4px 12px #3a183018; }
+.cobrament .total { display: flex; flex-direction: column; }
+.cobrament .total span { font-size: .8rem; color: var(--suau); }
+.cobrament .total strong { font-size: 1.3rem; }
+.cobrament .boto { min-height: 52px; color: var(--blanc); font-size: 1rem; }
+.cobrament .efectiu { background: #2E7D4F; }
+.cobrament .targeta-pag { background: #2F5AA8; }
+
+.toast { position: fixed; left: 12px; right: 12px; bottom: calc(var(--nav) + 12px + env(safe-area-inset-bottom)); z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: var(--text); color: var(--blanc); border-radius: 12px; }
+.toast[hidden] { display: none; }
+.amb-cobrament .toast { bottom: calc(var(--nav) + var(--cobrament) + 12px + env(safe-area-inset-bottom)); }
+
+dialog { border: 0; border-radius: 16px; padding: 0; width: min(92vw, 420px); color: var(--text); }
+dialog::backdrop { background: #3a183066; }
+.dialeg { padding: 18px; }
+.dialeg label { display: block; margin: 12px 0; font-weight: 500; }
+.accions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; flex-wrap: wrap; }
+code { overflow-wrap: anywhere; }
+
+@media (min-width: 760px) {
+  body, body.amb-cobrament { padding-bottom: 0; padding-left: 200px; }
+  body.amb-cobrament main { padding-bottom: calc(var(--cobrament) + 24px); }
+  .navegacio { top: 0; right: auto; width: 200px; height: 100vh; grid-template-columns: 1fr; grid-auto-rows: 64px; align-content: start; padding-top: 72px; border-top: 0; border-right: 1px solid var(--vora); }
+  .navegacio button { flex-direction: row; justify-content: flex-start; gap: 10px; padding: 0 20px; font-size: 1rem; }
+  .navegacio button[aria-current="page"] { box-shadow: inset 4px 0 0 var(--vermell); }
+  .cobrament { left: 200px; bottom: 0; }
+  .toast { left: 212px; bottom: 12px; }
+  .amb-cobrament .toast { bottom: calc(var(--cobrament) + 12px); }
+  .graella { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+}

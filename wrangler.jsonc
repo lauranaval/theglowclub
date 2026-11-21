@@ -1,0 +1,29 @@
+// Configuració de Cloudflare Workers per a The Glow Club (pla gratuït).
+// No hi ha cap recurs de pagament. El database_id s'omple quan la Laura creï la D1 al seu compte.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "theglowclub",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/entrar", "/dev/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "glow",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    // Domini de l'equip de Cloudflare Access (p. ex. theglowclub.cloudflareaccess.com) i AUD de l'aplicació.
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": ""
+  }
+  // USUARIES (correus permesos, separats per comes) és un secret: `npx wrangler secret put USUARIES`.
+  // No va aquí perquè no ha de quedar al repositori i perquè els secrets es conserven entre desplegaments.
+}

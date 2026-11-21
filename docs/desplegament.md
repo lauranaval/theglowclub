@@ -1,3 +1,16 @@
+# Cloudflare (app nova)
+
+Destí vigent (decisió del 21/11/2026): Cloudflare Workers + D1 + Access, pla gratuït i sense targeta. La proposta de Render de més avall és antiga i de pagament: no s'ha de fer servir.
+
+En desplegar, abans d'obrir l'app a ningú:
+
+- **Cloudflare Access:** crear l'aplicació amb la política de correu (codi d'un sol ús) per a les tres usuàries i una sessió llarga (per exemple, 30 dies).
+- **Variables de `wrangler.jsonc`:** `ACCESS_TEAM_DOMAIN` (domini de l'equip, `<equip>.cloudflareaccess.com`) i `ACCESS_AUD` (AUD de l'aplicació d'Access).
+- **Secret `USUARIES`:** els correus permesos separats per comes, amb `npx wrangler secret put USUARIES` (no es desa al repositori). Si queda buit, el Worker accepta qualsevol identitat que passi Access i no controla la usuària que declaren els dispositius.
+- **D1:** crear la base `glow`, posar-ne el `database_id` a `wrangler.jsonc` i aplicar `wrangler d1 migrations apply glow --remote`.
+- **No** posar mai `DEV_AUTH` a producció: només existeix per a l'arrencada local.
+- **F-18 (còpia diària) queda per al desplegament:** tasca programada que exporti D1 (`wrangler d1 export`) a un repositori privat cada dia i una restauració de prova verificada. Fins aleshores, F-18 no està complert.
+
 # Desplegament proposat: GitHub → Render → PostgreSQL
 
 > Context històric de la proposta de pagament. La preferència posterior de la propietària és cost zero. Consulta `HOSTING_SENSE_COST.md` i `TRASPAS_CLAUDE_CODE.md`. No aplicar aquest Blueprint com si fos gratuït.

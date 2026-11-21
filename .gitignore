@@ -7,3 +7,12 @@ __pycache__/
 staticfiles/
 work/*
 !work/.gitkeep
+
+# Tauler: resultats crus de proves (es regeneren)
+tauler/.resultats/
+.wrangler/
+dist/
+node_modules/
+test-results/
+playwright-report/
+.dev.vars

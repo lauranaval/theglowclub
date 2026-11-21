@@ -4,11 +4,28 @@
 
 Comença per [CLAUDE.md](CLAUDE.md) i el [traspàs complet](docs/TRASPAS_CLAUDE_CODE.md). L’[especificació original](docs/Glow_Club_Especificacio_Funcional_v1.0.md) i l’[encàrrec i decisions posteriors](docs/ENCARREC_I_DECISIONS.md) també són al repositori.
 
-**Estat vigent:** primer bloc implementat; aplicació encara no desplegada. La propietària vol començar sense pagar. `render.yaml` és una proposta anterior de pagament: llegir [hosting sense cost](docs/HOSTING_SENSE_COST.md) abans de desplegar.
+**Estat vigent (21/11/2026):** l'app es refà sobre Cloudflare (Workers, D1, Access) com a PWA. El **bloc 1 · Fira** (venda de paradeta sense connexió, caixa per dispositiu, sincronització) està implementat i provat en local; encara no està desplegat. El codi Django de més avall queda només com a referència.
 
-Primer bloc funcional de l’especificació v1.0: tallers, sessions, clientes, reserves, cobraments manuals i assistència. Interfície en català, adaptable a mòbil i ordinador. Totes les dades inicials són fictícies.
+Tauler del projecte (avenç, proves, tokens): obre `tauler/index.html`. Detall a [docs/TAULER.md](docs/TAULER.md).
 
-## Arrencada local
+## App nova · provar-la al teu ordinador
+
+Requisits: Node.js 22 o posterior. No cal cap compte de Cloudflare per provar-la en local.
+
+- Windows: doble clic a `IniciaGlowFira.bat`. S'obre el navegador a http://127.0.0.1:8787.
+- O bé, des d'un terminal: `npm install` i després `npm run dev`.
+
+L'entrada local és de prova: escriu qualsevol correu (per exemple, `laura@example.test`). A l'app real s'entra amb el codi que arriba al correu (Cloudflare Access). Les dades locals es desen a `.wrangler/local` (exclosa de Git).
+
+Per provar el mode sense connexió al navegador de l'ordinador: obre les eines de desenvolupament (F12) → Xarxa → «Sense connexió», i continua venent. Quan la tornes a activar, les vendes se sincronitzen.
+
+Proves automàtiques: `npm run check` (tipus, Vitest i Playwright, inclosa la vista mòbil i el mode sense connexió). Els resultats a comprovar són a [outcomes/](outcomes/).
+
+## Codi anterior (Django, només referència)
+
+Primer bloc funcional de l'especificació v1.0: tallers, sessions, clientes, reserves, cobraments manuals i assistència. No s'hi continua desenvolupant.
+
+### Arrencada local (Django)
 
 Requisits: Python 3.12 o posterior, pip i un navegador. Des de l’arrel del repositori:
 

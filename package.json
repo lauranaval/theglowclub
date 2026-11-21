@@ -1,0 +1,30 @@
+{
+  "name": "theglowclub",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-client.mjs",
+    "dev": "node scripts/servidor-local.mjs 8787",
+    "test:unit": "vitest run",
+    "test:e2e": "node scripts/amb-torn.mjs \"npm run build && playwright test\"",
+    "check": "npm run typecheck && vitest run && npm run test:e2e",
+    "tauler": "node scripts/tauler.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.client.json && tsc --noEmit -p tsconfig.sw.json && tsc --noEmit -p tsconfig.node.json"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.9.0",
+    "@cloudflare/workers-types": "^5.20261121.1",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^26.6.6",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "~4.1.0",
+    "wrangler": "^4.166.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "esbuild@0.28.2": true,
+    "workerd@1.20260815.1": true,
+    "workerd@1.20261119.1": true
+  }
+}
