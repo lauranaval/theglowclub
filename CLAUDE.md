@@ -3,7 +3,8 @@
 ## Comença aquí
 
 1. Llegeix `docs/TRASPAS_CLAUDE_CODE.md` (estat verificat, limitacions, mapa del codi i següents passos).
-2. Llegeix `docs/Glow_Club_Especificacio_Funcional_v1.0.md` (document original complet aportat per la usuària).
+2. Llegeix `docs/Glow_Club_Especificacio_Funcional_v2.0.md` (especificació vigent del 20/11/2026; mana sobre la v1.0 i fixa l'ordre de construcció: primer el bloc de la fira del 5/12). Prototip de pantalles: https://claude.ai/artifact/F4SBAPcnnfPNt6biMA7XEz
+   Context històric: `docs/Glow_Club_Especificacio_Funcional_v1.0.md` (document original aportat per la usuària).
 3. Llegeix `docs/ENCARREC_I_DECISIONS.md` (encàrrec i decisions de la conversa que complementen l’especificació).
 4. Per executar i provar: `README.md`, `docs/verificacio.md`. Per allotjar: `docs/HOSTING_SENSE_COST.md` i `docs/desplegament.md`.
 
@@ -13,21 +14,26 @@
 - Mòbil i ordinador; la propietària utilitza Windows.
 - Vol començar sense pagar cap servei. No crear recursos de pagament ni donar per acceptat el Blueprint actual.
 - Vol veure i provar el que s’ha desenvolupat abans de desplegar-lo. No donar un localhost remot com si fos accessible al seu ordinador. Una captura no és una aplicació interactiva.
-- El repositori és https://github.com/lauranaval/theglowclub, actualment públic.
+- El repositori és https://github.com/lauranaval/theglowclub, privat des del 21/11/2026.
 
 ## Punt de partida
 
-Ja existeix una implementació funcional del primer bloc: tallers, sessions, clientes bàsiques, reserves, cobraments manuals i assistència. Arquitectura Django 5.2, templates de servidor, SQLite local o PostgreSQL compartit; no hi ha React, API separada ni servei desplegat. Aprofita aquesta base i comprova-la abans de proposar reescriure-la.
+**Decisió del 21/11/2026:** l'app es refà sobre Cloudflare (Workers en TypeScript, D1, Access) com a PWA instal·lable, amb la venda de paradeta completament funcional sense connexió a l'iPad. Detall i motius a la secció «Arquitectura i funcionament sense connexió» de l'especificació v2.0. Motiu principal: allotjament gratuït que no s'adorm i ús comercial permès.
 
-El codi inicial i els fitxers de desplegament es van publicar al commit `66493cf69661c2af1940a498139dc7951015c3b4`. Es van executar 18 proves amb SQLite i PostgreSQL, també a GitHub Actions. Els altres blocs de l’especificació NO estan implementats.
+El codi Django existent (primer bloc: tallers, sessions, reserves, cobraments, assistència, 18 proves) queda com a referència de regles i casos de prova; no s'hi ha de continuar desenvolupant. Es pot retirar del repositori quan la nova base cobreixi aquestes funcions.
+
+## Metodologia de desenvolupament
+
+Desenvolupament guiat per resultats (ODD) amb l'arnès Superpowers: cada bloc té un fitxer de resultats aprovat per la propietària, cada resultat té una prova escrita abans del codi, i cap bloc es dona per acabat si les proves (Vitest i Playwright, inclosa la vista mòbil i el mode sense connexió) no passen.
 
 ## Regles que s’han de preservar
 
 - Reserves pendents i confirmades ocupen places; espera i cancel·lades no.
 - Una senyal vençuda només avisa: no alliberar places automàticament.
 - Aforament validat al servidor dins d’una transacció, incloses altes simultànies, canvis de places i promocions.
-- A PostgreSQL totes les escriptures de reserva bloquegen Session abans de Reservation. A SQLite s’utilitza BEGIN IMMEDIATE. No eliminar aquests bloqueigs sense substituir-los i tornar a provar concurrència.
-- Congelar preu i senyal unitaris a la reserva. Imports Decimal, no float.
+- La comprovació d’aforament i l’alta o canvi de reserva s’han d’executar en una sola operació atòmica a D1 (una sentència condicional o un batch), i s’ha de provar amb peticions simultànies.
+- Congelar preu i senyal unitaris a la reserva. Imports en cèntims enters, mai float.
+- Les vendes sense connexió porten un identificador únic generat al dispositiu; la sincronització ha de ser idempotent.
 - Senyal per Bizum amb parcials; confirmar quan arriba al mínim. Saldo per Bizum o efectiu. Cada moviment registra data efectiva, data de registre i usuària.
 - Cancel·lar conserva cobraments i historial. No equival a retornar diners.
 - Assistència és un nombre independent de l’estat de pagament.
@@ -36,6 +42,6 @@ El codi inicial i els fitxers de desplegament es van publicar al commit `66493cf
 
 ## Atenció al desplegament
 
-`render.yaml` és una proposta anterior DE PAGAMENT (`starter` + `basic-256mb`). No correspon a la preferència posterior de cost zero. Render gratuït + Neon gratuït només s’ha proposat: no està adaptat, contractat, validat ni desplegat. Cal comprovar les condicions actuals abans de comprometre cap solució.
+Destí: Cloudflare (Workers, D1, Access) en pla gratuït, sense targeta. `render.yaml` és una proposta antiga DE PAGAMENT i no s'ha de fer servir. No crear cap recurs de pagament sense aprovació explícita de la propietària.
 
 La documentació és context i requisits; no pressuposa credencials ni autorització per executar tots els passos descrits. Segueix l’encàrrec actual de la usuària.
