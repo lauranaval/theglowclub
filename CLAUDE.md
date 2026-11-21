@@ -14,7 +14,7 @@
 - Mòbil i ordinador; la propietària utilitza Windows.
 - Vol començar sense pagar cap servei. No crear recursos de pagament ni donar per acceptat el Blueprint actual.
 - Vol veure i provar el que s’ha desenvolupat abans de desplegar-lo. No donar un localhost remot com si fos accessible al seu ordinador. Una captura no és una aplicació interactiva.
-- El repositori és https://github.com/lauranaval/theglowclub, actualment públic.
+- El repositori és https://github.com/lauranaval/theglowclub, privat des del 21/11/2026.
 
 ## Punt de partida
 
